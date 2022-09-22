@@ -1,0 +1,5 @@
+vendor/
+uploads/
+SpreadSheetReader/
+ExcelPackage/
+.idea/

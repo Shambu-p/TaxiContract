@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>Keno</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/my_style.css">
+</head>
+<body>
+    <div class="container shadow-lg mt-4 p-0" style="width: 700px;">
+        <div class="p-3 mb-0 card-title header">
+            <h5 class="card-title">Get Bingo</h5>
+        </div>
+        <div class="d-flex p-0 justify-content-center" style="flex-wrap: wrap" id="inner_container">
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var html = '';
+        for(let i = 1; i <= 80; i ++){
+
+            if(i === 80) {
+                html += '' +
+                    '            <div class="single_number_container selected_number d-flex" >\n' +
+                    '                <span class="number_item">80</span>\n' +
+                    '            </div>' +
+                    '';
+            } else {
+                html += '' +
+                    '                    <div class="single_number_container d-flex" >\n' +
+                    '                    <span class="number_item">' + i + '</span>\n' +
+                    '                </div>';
+            }
+
+            if(i === 40) {
+                html +=
+                    '            <div class="led_view d-flex justify-content-between p-3" style="border: 1px solid #797979">\n' +
+                    '                <h5 class="card-title" style="font-weight: bolder; font-size: 30px;">Keno Game</h5>\n' +
+                    '                <h5 style="font-weight: bolder; font-size: 30px;">Draw: 10</h5>\n' +
+                    '                <h5 style="font-weight: bolder; font-size: 40px; font-family: sans-serif">3:25</h5>\n' +
+                    '            </div>';
+            }
+
+        }
+
+        document.getElementById("inner_container").innerHTML = html;
+
+    </script>
+</body>
+</html>
