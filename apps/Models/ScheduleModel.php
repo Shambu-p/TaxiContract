@@ -64,7 +64,7 @@ class ScheduleModel extends Model{
      * @throws DBConnectionError
      * @throws ExecutionException
      */
-    function createSchedule($pu, $df, $start, $end, $driver_id, $client, $route, $days){
+    function createSchedule($pu, $df, $start, $end, $driver_id, $client, $route, $days) {
 
         $query = $this->addRecord();
 
@@ -85,8 +85,8 @@ class ScheduleModel extends Model{
 
         $insert_array["id"] = $id;
 
-        $model = new DaysModel();
-        $model->createDays($days, $id);
+        // $model = new DaysModel();
+        // $model->createDays($days, $id, $driver_id);
 
         return $insert_array;
 

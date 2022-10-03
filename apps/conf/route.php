@@ -22,6 +22,11 @@ Route::post(
     [new ExcelMapperController(), "save"]
 );
 
+Route::get(
+    "/schedule_list",
+    "/Schedule/ScheduleList"
+);
+
 Route::post(
     "/import",
     [new ExcelMapperController(), "import"],

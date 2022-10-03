@@ -16,12 +16,13 @@ class Schedule extends Builder{
             $table->autoincrement("id"),
             $table->string("pick_up")->length(10)->nullable(false),
             $table->string("drop_off")->length(10)->nullable(false),
-            $table->string("day_week")->nullable(false)->length(4),
+            // $table->string("day_week")->nullable(false)->length(4),
             $table->int("start_date")->nullable(false)->length(20)->sign(false),
             $table->int("end_date")->nullable(false)->length(20)->sign(false),
             $table->int("driver_id")->nullable(false)->sign(false),
             $table->string("client")->nullable(false)->length(30)->sign(false),
-            $table->string("route")->nullable(false)->length(100)->sign(false)
+            $table->string("route")->nullable(false)->length(100)->sign(false),
+            $table->string("days")->nullable(false)->length(100)->sign(false)
             //@att_end
         ];
         

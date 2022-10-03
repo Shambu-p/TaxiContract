@@ -28,15 +28,15 @@ class Alert {
     ];
 
     public static function sendSuccessAlert($message){
-        self::$alert["success"]["message"] = $message;
+        $_SESSION["alert"]["success"]["message"] = $message;
     }
 
     public static function sendInfoAlert($message){
-        self::$alert["info"]["message"] = $message;
+        $_SESSION["alert"]["info"]["message"] = $message;
     }
 
     public static function sendErrorAlert($message){
-        self::$alert["error"]["message"] = $message;
+        $_SESSION["alert"]["error"]["message"] = $message;
     }
 
     public static function displayAlert(){
@@ -44,30 +44,30 @@ class Alert {
         $message = "";
         $class_name = "";
 
-        if(isset(self::$alert["success"]["message"]) && self::$alert["success"]["message"] != ""){
+        if(isset($_SESSION["alert"]["success"]["message"]) && $_SESSION["alert"]["success"]["message"] != ""){
 
             $class_name = self::getSuccessClassName();
-            $message = self::$alert["success"]["message"];
+            $message = $_SESSION["alert"]["success"]["message"];
 
-            self::$alert["success"]["message"] = "";
+            $_SESSION["alert"]["success"]["message"] = "";
 
         }
 
-        if(isset(self::$alert["info"]["message"]) && self::$alert["info"]["message"] != ""){
+        if(isset($_SESSION["alert"]["info"]["message"]) && $_SESSION["alert"]["info"]["message"] != ""){
 
             $class_name = self::getinfoClassName();
-            $message = self::$alert["info"]["message"];
+            $message = $_SESSION["alert"]["info"]["message"];
 
-            self::$alert["info"]["message"] = "";
+            $_SESSION["alert"]["info"]["message"] = "";
 
         }
 
-        if(isset(self::$alert["error"]["message"]) && self::$alert["error"]["message"] != ""){
+        if(isset($_SESSION["alert"]["error"]["message"]) && $_SESSION["alert"]["error"]["message"] != ""){
 
             $class_name = self::getErrorClassName();
-            $message = self::$alert["error"]["message"];
+            $message = $_SESSION["alert"]["error"]["message"];
 
-            self::$alert["error"]["message"] = "";
+            $_SESSION["alert"]["error"]["message"] = "";
 
         }
 
@@ -79,11 +79,11 @@ class Alert {
 
     }
 
-    public static function setSuccessClassName($name){
+    public static function setSuccessClassName($name) {
         self::$alert["success"]["class_name"] = $name;
     }
 
-    public static function setErrorClassName($name){
+    public static function setErrorClassName($name) {
         self::$alert["error"]["class_name"] = $name;
     }
 

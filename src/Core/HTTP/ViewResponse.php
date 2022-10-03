@@ -27,8 +27,8 @@ class ViewResponse extends Response
 
         http_response_code(200);
 
-        $loadTemplate = function ($location){
-            ViewResponse::addLayout($location);
+        $loadTemplate = function ($location, $request = null) {
+            ViewResponse::addLayout($location, $request);
         };
 
         $request = $request_data ?? Engine::$request->request;
@@ -67,7 +67,11 @@ class ViewResponse extends Response
 
     }
 
-    static function addLayout($location){
+    static function addLayout($location, $request_data = null){
+
+        $request = $request_data ?? Engine::$request->request;
+        $main_path = Request::hostAddress();
+
         include_once DirConfiguration::$_main_folder."/apps/Templates".$location.".php";
     }
 

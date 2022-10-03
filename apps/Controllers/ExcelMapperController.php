@@ -9,6 +9,7 @@ use Absoft\Line\Core\HTTP\JSONResponse;
 use Absoft\Line\Core\HTTP\ViewResponse;
 use Absoft\Line\Core\Modeling\Controller;
 use Application\conf\DirConfiguration;
+use Application\Models\DaysModel;
 use Application\Models\ScheduleModel;
 use Application\Models\StudentsModel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -100,8 +101,10 @@ class ExcelMapperController extends Controller{
 
         $spreadsheet = IOFactory::load($request["file_name"]);
         $model = new ScheduleModel();
+        $days_model = new DaysModel();
         $student_model = new StudentsModel();
         $sheet = $spreadsheet->getActiveSheet();
+        $driver_days = [];
         $row_count = 1;
 
         foreach ($sheet->getRowIterator() as $row) {
@@ -114,6 +117,7 @@ class ExcelMapperController extends Controller{
             $days = explode(",", trim(strtolower($row->getWorksheet()->getCell($request["days"]."$row_count")->getValue())));
 
             $client_id = $row->getWorksheet()->getCell($request["client"]."$row_count")->getValue();
+            $driver_id = $row->getWorksheet()->getCell($request["driver_id"]."$row_count")->getValue();
             $studs = explode(",", $row->getWorksheet()->getCell($request["students"]."$row_count")->getValue());
             $stud_array = [];
 
@@ -124,17 +128,20 @@ class ExcelMapperController extends Controller{
                 ];
             }
 
-            $model->createSchedule(
+            $created_schedule = $model->createSchedule(
                 $row->getWorksheet()->getCell($request["pick_up"]."$row_count")->getValue(),
                 $row->getWorksheet()->getCell($request["drop_off"]."$row_count")->getValue(),
                 strtotime($row->getWorksheet()->getCell($request["start_date"]."$row_count")->getValue()),
                 Strtotime($row->getWorksheet()->getCell($request["end_date"]."$row_count")->getValue()),
-                $row->getWorksheet()->getCell($request["driver_id"]."$row_count")->getValue(),
+                $driver_id,
                 $client_id,
                 $row->getWorksheet()->getCell($request["route"]."$row_count")->getValue(),
                 $days
             );
 
+            $driver_days[$driver_id] = array_merge((isset($driver_days[$driver_id]) ? $driver_days[$driver_id] : []), $days_model->dayCreateArray($days, $created_schedule["id"], $driver_id));
+
+            $days_model->importDays($driver_days);
             $student_model->createMultipleStudents($stud_array);
 
             $row_count += 1;

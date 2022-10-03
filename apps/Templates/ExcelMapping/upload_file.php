@@ -3,25 +3,8 @@
 use Absoft\Line\App\Pager\Alert;
 use Absoft\Line\Core\HTTP\Route;
 
+$loadTemplate("/Layouts/header");
 ?>
-<html>
-<head>
-    <title>Driver Contract</title>
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="icon" href="./favicon.png">
-</head>
-<body>
-<div class="d-flex pl-3 pr-3 pt-2 pb-2 justify-content-between mb-4 border-bottom shadow-sm bg-white" style="position: sticky; top: 0;">
-    <div class="d-flex">
-        <img src="./favicon.png" alt="image" style="width: 70px; height: 70px">
-        <h5 class="navbar-brand" style="margin: auto; font-size: 30px;">Go To School</h5>
-    </div>
-
-    <div class="d-flex justify-content-start">
-        <a href="/" class="btn btn-link btn-lg mr-2">Home</a>
-        <a href="/upload" class="btn btn-link btn-lg mr-2">Upload</a>
-    </div>
-</div>
 
 <form
     action="<?php print Route::route_address("/save_excel") ?>"
@@ -41,7 +24,7 @@ use Absoft\Line\Core\HTTP\Route;
             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
         </div>
         <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="excel_file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="excel_file" required >
             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
         </div>
     </div>
@@ -56,5 +39,7 @@ use Absoft\Line\Core\HTTP\Route;
     </p>
     <button type="submit" class="btn btn-lg btn-primary">Upload</button>
 </form>
-</body>
-</html>
+
+<?php
+$loadTemplate("/Layouts/footer");
+?>

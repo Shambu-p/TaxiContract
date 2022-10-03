@@ -26,7 +26,7 @@ class DBConfiguration {
             "first" => [
                 "DB_NAME" => "driver_contract",
                 "DB_USERNAME" => "root",
-                "DB_PASSWORD" => "",
+                "DB_PASSWORD" => "password",
                 "HOST_ADDRESS" => "localhost:3306"
             ]
         ],

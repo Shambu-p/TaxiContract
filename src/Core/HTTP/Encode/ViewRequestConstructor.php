@@ -85,7 +85,7 @@ class ViewRequestConstructor extends RequestConstructor
         $params_array = $this->request->route["parameters"];
 
 
-        foreach ($params_array as $parameter){
+        foreach ($params_array as $parameter => $val){
 
             if(isset($request_array[$parameter])){
                 $request .= "/".$request_array[$parameter];

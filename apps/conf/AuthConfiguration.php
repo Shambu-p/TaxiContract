@@ -12,9 +12,10 @@ class AuthConfiguration {
     public static array $conf = [
         "user_auth" => [
             "table" => "Application\\Models\\UsersModel",
-            "with" => ["username", "password"],
+            "is_token_based" => false,
+            "with" => ["User_PhoneNumber", "password"],
             "order" => "keep",//once
-            "save" => ["id", "username", "email", "role"]
+            "save" => ["idUser", "User_Name", "User_PhoneNumber", "User_Role"]
         ],
         "admin_auth" => [
             "table" => "Absoft\\App\\Administration\\AdminModel",
@@ -23,6 +24,8 @@ class AuthConfiguration {
             "save" => ["id", "username", "role", "fullname"]
         ]
     ];
+
+    public static string $parameter = "Authorization";
 
     /**
      * @var int
