@@ -61,6 +61,7 @@ class ExcelMapperController extends Controller{
         return $this->display(
             "/ExcelMapping/map_file", [
                 "data" => $this->fetchData($file_destination),
+//                "data" => $this->phpExcelDataFetch($file_destination),
                 "file_name" => $file_destination
         ]);
 
@@ -131,12 +132,11 @@ class ExcelMapperController extends Controller{
             $created_schedule = $model->createSchedule(
                 $row->getWorksheet()->getCell($request["pick_up"]."$row_count")->getValue(),
                 $row->getWorksheet()->getCell($request["drop_off"]."$row_count")->getValue(),
-                strtotime($row->getWorksheet()->getCell($request["start_date"]."$row_count")->getValue()),
-                Strtotime($row->getWorksheet()->getCell($request["end_date"]."$row_count")->getValue()),
+                strtotime(str_replace("\\", "/", $row->getWorksheet()->getCell($request["start_date"]."$row_count")->getValue())),
+                Strtotime(str_replace("\\", "/", $row->getWorksheet()->getCell($request["end_date"]."$row_count")->getValue())),
                 $driver_id,
                 $client_id,
-                $row->getWorksheet()->getCell($request["route"]."$row_count")->getValue(),
-                $days
+                $row->getWorksheet()->getCell($request["route"]."$row_count")->getValue()
             );
 
             $driver_days[$driver_id] = array_merge((isset($driver_days[$driver_id]) ? $driver_days[$driver_id] : []), $days_model->dayCreateArray($days, $created_schedule["id"], $driver_id));
@@ -150,6 +150,39 @@ class ExcelMapperController extends Controller{
 
         Alert::sendSuccessAlert("Imported successfully");
         return $this->display("/ExcelMapping/upload_file");
+
+    }
+
+    /**
+     * @param $file_name
+     * @return array
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     *
+     */
+    public function phpExcelDataFetch($file_name){
+
+        $data = [];
+        $reader = \PHPExcel_IOFactory::createReaderForFile($file_name);
+        $excel_obj = $reader->load($file_name);
+        $worksheet = $excel_obj->getSheet('0');
+
+        $last_row = $worksheet->getHighestRow();
+        $last_column = $worksheet->getHighestDataColumn();
+        $last_column_number = \PHPExcel_Cell::columnIndexFromString($last_column);
+
+        for ($i = 1; $i <= $last_row; $i++) {
+
+            $col = [];
+            for ($j = 1; $j <= $last_column_number; $j++){
+                $col[] = $worksheet->getCell(\PHPExcel_Cell::stringFromColumnIndex($j).$i)->getValue();
+            }
+
+            $data[] = $col;
+
+        }
+
+        return $data;
 
     }
     

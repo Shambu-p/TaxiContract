@@ -32,23 +32,72 @@ class ScheduleModel extends Model{
         return $this->getSchedules("driver_id", $driver_id);
     }
 
-    function getScheduleByClient($client_id){
+    function getScheduleByClient($client_id) {
         return $this->getSchedules("client", $client_id);
     }
 
-    function getSchedules($column, $value){
+    function getSchedules($column, $value) {
         $query = $this->searchRecord();
         $query->where($column, $value);
-        $result = $query->fetch();
-        return $result->fetchAll();
+        return $query->fetch()->fetchAll();
     }
 
-    function getSingleSchedule($schedule_id){
+    function getSchedulesByDay($day) {
+
+        $return = [];
+        $model = new DaysModel();
+        $query = $model->searchRecord();
+        $query->where("day", $day);
+        $query->notWhere("schedule_id", 0, true);
+        $result = $query->fetch()->fetchAll();
+
+        foreach ($result as $res) {
+
+            if($res["schedule_id"] != 0 && isset($return[$res["schedule_id"]])) {
+                continue;
+            }
+
+            $return[$res["schedule_id"]] = $this->findRecord($res["schedule_id"]);
+
+        }
+
+        return $return;
+
+    }
+
+    function getSingleSchedule($schedule_id) {
         $query = $this->searchRecord();
         $query->where("id", $schedule_id);
         $result = $query->fetch();
 
         return ($result->rowCount() > 0) ? $result->fetch() : [];
+    }
+
+    /**
+     * @param $schedule_id
+     * @return array
+     * @throws DBConnectionError
+     * @throws ExecutionException
+     */
+    function getScheduleDetail($schedule_id) {
+
+        $schedule = $this->getSingleSchedule($schedule_id);
+        if(empty($schedule)){
+            return [];
+        }
+
+        $day_model = new DaysModel();
+        $students_model = new StudentsModel();
+
+        $days = $day_model->getBySchedule($schedule_id);
+        $students = $students_model->getClientStudents($schedule["client"]);
+
+        return [
+            "detail" => $schedule,
+            "days" => $days,
+            "students" => $students
+        ];
+
     }
 
     /**
@@ -64,7 +113,7 @@ class ScheduleModel extends Model{
      * @throws DBConnectionError
      * @throws ExecutionException
      */
-    function createSchedule($pu, $df, $start, $end, $driver_id, $client, $route, $days) {
+    function createSchedule($pu, $df, $start, $end, $driver_id, $client, $route) {
 
         $query = $this->addRecord();
 
@@ -84,9 +133,6 @@ class ScheduleModel extends Model{
         $id = $this->lastInsertId();
 
         $insert_array["id"] = $id;
-
-        // $model = new DaysModel();
-        // $model->createDays($days, $id, $driver_id);
 
         return $insert_array;
 

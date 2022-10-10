@@ -53,6 +53,14 @@ class Selection implements Query {
         $this->query_constructor->orWhere($column, $value, $escape_value);
     }
 
+    function notWhere($column, $value, $escape_value = false){
+        $this->query_constructor->notWhere($column, $value, $escape_value);
+    }
+
+    function orNotWhere($column, $value, $escape_value = false){
+        $this->query_constructor->orNotWhere($column, $value, $escape_value);
+    }
+
     function greater($column, $value, $escape_value = false){
         $this->query_constructor->greater($column, $value, $escape_value);
     }

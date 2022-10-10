@@ -83,6 +83,14 @@ class RecordManipulation {
         $this->term($column, $value, "=", "or", $escape_value);
     }
 
+    function notWhere($column, $value, $escape_value = false){
+        $this->term($column, $value, "!=", "and", $escape_value);
+    }
+
+    function orNotWhere($column, $value, $escape_value = false){
+        $this->term($column, $value, "!=", "or", $escape_value);
+    }
+
     function term($column, $value, $equation = "=", $conjunction = "and", $escape_value = false){
 
         if(in_array($column, $this->model->MAINS)){

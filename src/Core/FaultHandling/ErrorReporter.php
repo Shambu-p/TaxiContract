@@ -4,8 +4,8 @@ use Absoft\Line\Core\FaultHandling\FaultHandler;
 
 ini_set('display_errors', 0);
 
-error_reporting(-1);
-//error_reporting( E_ALL) ;
+error_reporting(E_ALL & ~E_DEPRECATED);
+//error_reporting( 0) ;
 //register_shutdown_function('shutDown');
 register_shutdown_function('fatalErrorHandler');
 //set_error_handler('ErrorHandler', E_ALL);

@@ -68,7 +68,7 @@ class StudentsModel extends Model{
      */
     public function getClientStudents($client){
         $query = $this->searchRecord();
-        $query->where("client", $client);
+        $query->where("client_id", $client);
         $result = $query->fetch();
         return $result->fetchAll();
     }

@@ -74,7 +74,7 @@ class DaysModel extends Model{
 
                     $query->add([
                         "day" => $d,
-                        "dirver_id" => $driver_id,
+                        "driver_id" => $driver_id,
                         "schedule_id" => 0
                     ]);
                 
@@ -88,7 +88,7 @@ class DaysModel extends Model{
 
     }
 
-    function dayCreateArray($day_array, $schedule_id, $dirver_id) {
+    function dayCreateArray($day_array, $schedule_id, $driver_id) {
 
         $return_array = [];
 
@@ -96,7 +96,7 @@ class DaysModel extends Model{
 
             $return_array[] = [
                 "day" => $day,
-                "dirver_id" => $dirver_id,
+                "driver_id" => $driver_id,
                 "schedule_id" => $schedule_id
             ];
 
@@ -113,14 +113,55 @@ class DaysModel extends Model{
         return $result->fetchAll();
     }
 
-    function freeDrivers($day = ""){
+    function getFreeDriversByDay($day) {
+        $query = $this->searchRecord();
+        $query->where("day", $day);
+        $query->where("schedule_id", 0);
+        return $query->fetch()->fetchAll();
+    }
+
+    function freeDrivers($day = null, $driver_id = null){
+
         $query = $this->searchRecord();
         if($day){
             $query->where("day", $day);
         }
+        if($driver_id){
+            $query->where("driver_id", $driver_id);
+        }
+
         $query->where("schedule_id", 0);
-        $result = $query->fetch();
-        return $result->fetchAll();
+        return $query->fetch()->fetchAll();
+
+    }
+
+    /**
+     * @param $driver_id
+     * @return array
+     * @throws DBConnectionError
+     * @throws ExecutionException
+     */
+    function getDriverDetail($driver_id){
+
+        $return = [];
+        $schedule_model = new ScheduleModel();
+        $query = $this->searchRecord();
+
+        if($driver_id){
+            $query->where("driver_id", $driver_id);
+        }
+
+        $return["driver_id"] = $driver_id;
+        $return["days"] = $query->fetch()->fetchAll();
+
+        foreach($return["days"] as $day){
+            if($day["schedule_id"] != 0){
+                $return["schedules"][$day["day"]][] = $schedule_model->getSingleSchedule($day["schedule_id"]);
+            }
+        }
+
+        return $return;
+
     }
 
     function getBySchedule($schedule_id) {
