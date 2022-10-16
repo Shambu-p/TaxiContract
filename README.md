@@ -1,5 +1,5 @@
 # TaxiContract
-backend API for Keno game web based application. developed with PHP Line framework.
+developed with PHP Line framework.
 
 ## how to prepare for use?
 1. php requirements
